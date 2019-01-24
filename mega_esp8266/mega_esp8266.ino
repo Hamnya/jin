@@ -1,15 +1,12 @@
-#include <SoftwareSerial.h>
-#define RX 10
-#define TX 11
-String AP = "oysterYS";       // CHANGE ME
-String PASS = "52005200ys"; // CHANGE ME
-String API = "JY3ND9YVXCJNHHU4";   // CHANGE ME
-String HOST = "184.106.153.149";
+String AP = "oysterYS";       // CHANGE ME : WIFI_NAME
+String PASS = "52005200ys"; // CHANGE ME : WIFI_PWD
+String API = "JY3ND9YVXCJNHHU4";   // CHANGE ME : THINKSPEAK
+String HOST = "184.106.153.149"; // 
 String PORT = "80";
 String field = "field1";
 int countTrueCommand;
 int countTimeCommand; 
-boolean found = false; 
+boolean found = false;  
 int valSensor = 1;
 
   
@@ -22,14 +19,15 @@ void setup() {
 }
 void loop() {
  valSensor = getSensorData();
- //String getData = "GET /update?api_key="+ API +"&"+ field +"="+String(valSensor);
-  String getData = "GET /todayrecyle/wifi/log.jsp?data=1111";
+ //HTTP 통신 
+ String getData = "GET /update?api_key="+ API +"&"+ field +"="+String(valSensor);
  sendCommand("AT+CIPMUX=1",5,"OK");
  sendCommand("AT+CIPSTART=0,\"TCP\",\""+ HOST +"\","+ PORT,15,"OK");
  sendCommand("AT+CIPSEND=0," +String(getData.length()+4),4,">");
  Serial2.println(getData);delay(1500);countTrueCommand++;
  sendCommand("AT+CIPCLOSE=0",5,"OK");
 }
+//테스트를 위한 센서 데이터 
 int getSensorData(){
   return random(1000); // Replace with 
 }
@@ -52,7 +50,7 @@ void sendCommand(String command, int maxTime, char readReplay[]) {
   
   if(found == true)
   {
-    Serial.println("OYI");
+    Serial.println("SUCCESS");
     countTrueCommand++;
     countTimeCommand = 0;
   }
